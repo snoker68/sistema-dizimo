@@ -1,0 +1,136 @@
+:root {
+    --primary-color: #1e293b; /* Slate 800 */
+    --secondary-color: #f59e0b; /* Amber 500 */
+    --bg-color: #f8fafc; /* Slate 50 */
+    --text-color: #334155; /* Slate 700 */
+    --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+}
+
+/* Navbar Premium Styling */
+.navbar {
+    background-color: var(--primary-color) !important;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    font-size: 1.4rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.nav-link:hover {
+    opacity: 0.8;
+}
+
+/* Modern Card Styling */
+.card {
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+    background: #ffffff;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--hover-shadow);
+}
+
+.card-header {
+    background-color: rgba(0,0,0,0.015);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-radius: 16px 16px 0 0 !important;
+}
+
+/* Form and Buttons enhancements */
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    transition: all 0.2s ease;
+    letter-spacing: 0.3px;
+}
+
+.btn-warning {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: #d97706; /* Amber 600 */
+    border-color: #d97706;
+    color: white;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    border: 1px solid #cbd5e1;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    border-color: var(--secondary-color);
+}
+
+/* Beautiful Tables */
+.table {
+    border-spacing: 0;
+    border-collapse: separate;
+}
+
+.table th {
+    border-top: none;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+    font-weight: 600;
+    padding: 1rem;
+}
+
+.table td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.table-hover tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(245, 158, 11, 0.05);
+}
+
+/* Fancy Badges */
+.badge {
+    padding: 0.4em 0.8em;
+    border-radius: 6px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* Custom Colors Classes */
+.bg-primary-custom {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+.text-primary-custom {
+    color: var(--primary-color) !important;
+}

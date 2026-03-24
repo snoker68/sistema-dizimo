@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row justify-content-center">
+<div class="row justify-content-center mt-4">
     <div class="col-md-8">
-        <div class="card shadow-sm">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0">Registrar Pagamento de Dízimo</h5>
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent border-0 pt-4 pb-0">
+                <h5 class="mb-0 fw-bold text-success"><i class="bi bi-cash-coin me-2"></i>Registrar Pagamento de Dízimo</h5>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -22,9 +22,9 @@
                             {% endfor %}
                         </div>
                     {% endfor %}
-                    <div class="d-flex justify-content-between mt-4">
-                        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancelar</a>
-                        <button type="submit" class="btn btn-success">Registrar Pagamento</button>
+                    <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                        <a href="{% url 'listar_pagamentos' %}" class="btn btn-light border fw-bold">Cancelar</a>
+                        <button type="submit" class="btn btn-success fw-bold"><i class="bi bi-save2-fill me-1"></i>Registrar Pagamento</button>
                     </div>
                 </form>
             </div>
