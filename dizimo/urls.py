@@ -6,6 +6,7 @@ urlpatterns = [
     
     path('dizimista/', views.DizimistaListView.as_view(), name='listar_dizimistas'),
     path('dizimista/novo/', views.DizimistaCreateView.as_view(), name='cadastrar_dizimista'),
+    path('dizimista/importar/', views.importar_dizimistas_excel, name='importar_dizimistas'),
     path('dizimista/<int:pk>/editar/', views.DizimistaUpdateView.as_view(), name='editar_dizimista'),
     path('dizimista/<int:pk>/excluir/', views.DizimistaDeleteView.as_view(), name='excluir_dizimista'),
     

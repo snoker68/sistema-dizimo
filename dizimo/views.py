@@ -11,6 +11,9 @@ from django.utils import timezone
 import datetime
 import csv
 from django.http import HttpResponse
+from django.contrib import messages
+import openpyxl
+from decimal import Decimal
 
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
@@ -134,3 +137,61 @@ def exportar_pagamentos_csv(request):
             p.registrado_por.username if p.registrado_por else 'N/A'
         ])
     return response
+
+@login_required
+def importar_dizimistas_excel(request):
+    if request.method == 'POST' and request.FILES.get('excel_file'):
+        excel_file = request.FILES['excel_file']
+        
+        # Validação do arquivo
+        if not excel_file.name.endswith('.xlsx'):
+            messages.error(request, 'Formato inválido. Por favor, envie apenas arquivos .xlsx (Excel).')
+            return redirect('listar_dizimistas')
+
+        try:
+            wb = openpyxl.load_workbook(excel_file)
+            sheet = wb.active
+            
+            novos_dizimistas = []
+            
+            # Pula o cabeçalho (assumindo a linha 1 como cabeçalho)
+            for row in sheet.iter_rows(min_row=2, values_only=True):
+                # Se a primeira coluna (nome) estiver vazia, ignora a linha
+                if not row[0]: 
+                    continue
+                    
+                nome = str(row[0]).strip()
+                endereco = str(row[1] or '').strip()
+                bairro = str(row[2] or '').strip()
+                estado_civil = str(row[3] or 'Solteiro').strip().capitalize()
+                
+                # Tratamento financeiro tolerante a formatos de Excel
+                try:
+                    valor_str = str(row[4]).replace('R$', '').replace(',', '.').strip()
+                    if valor_str == 'None' or not valor_str:
+                        valor = Decimal('0.00')
+                    else:
+                        valor = Decimal(valor_str)
+                except Exception:
+                    valor = Decimal('0.00')
+                    
+                # Filtra escolha fixa
+                if estado_civil not in ['Solteiro', 'Casado']:
+                    estado_civil = 'Solteiro'
+                    
+                novo = Dizimista(
+                    nome=nome,
+                    endereco=endereco,
+                    bairro=bairro,
+                    estado_civil=estado_civil,
+                    valor_primeira_contribuicao=valor
+                )
+                novos_dizimistas.append(novo)
+                
+            Dizimista.objects.bulk_create(novos_dizimistas)
+            messages.success(request, f'{len(novos_dizimistas)} dizimistas foram importados com sucesso da sua planilha!')
+            
+        except Exception as e:
+            messages.error(request, f'Erro inesperado ao processar o arquivo: {str(e)}')
+            
+    return redirect('listar_dizimistas')
