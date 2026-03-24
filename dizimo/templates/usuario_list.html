@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="text-warning mb-1">Gerenciar Agentes (Usuários)</h2>
+        <p class="text-muted mb-0">Controle quem tem acesso para registrar dízimos no sistema.</p>
+    </div>
+    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <a href="{% url 'cadastrar_usuario' %}" class="btn btn-warning fw-bold">
+            + Cadastrar Novo Agente
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-warning">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Usuário (Login)</th>
+                        <th>Nome Completo</th>
+                        <th>Nível de Acesso</th>
+                        <th>Status</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in usuarios %}
+                    <tr>
+                        <td><strong>{{ u.username }}</strong></td>
+                        <td>{{ u.first_name }} {{ u.last_name }}</td>
+                        <td>
+                            {% if u.is_superuser %}
+                            <span class="badge bg-danger">Administrador Geral</span>
+                            {% elif u.is_staff %}
+                            <span class="badge bg-warning text-dark">Líder / Gerente</span>
+                            {% else %}
+                            <span class="badge bg-primary">Agente Base</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if u.is_active %}
+                            <span class="text-success fw-bold">Ativo</span>
+                            {% else %}
+                            <span class="text-danger">Inativo</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            {% if request.user != u and not u.is_superuser or request.user.is_superuser and request.user != u %}
+                            <form method="post" action="{% url 'excluir_usuario' u.pk %}" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja apagar o acesso deste agente?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Excluir Acesso</button>
+                            </form>
+                            {% else %}
+                            <button class="btn btn-sm btn-secondary" disabled>Você</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">Nenhum agente cadastrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
