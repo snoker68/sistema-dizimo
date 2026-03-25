@@ -17,12 +17,14 @@ class AgenteCreationForm(UserCreationForm):
 class DizimistaForm(forms.ModelForm):
     class Meta:
         model = Dizimista
-        fields = ['nome', 'endereco', 'bairro', 'estado_civil', 'valor_primeira_contribuicao']
+        fields = ['numero_dizimista', 'nome', 'endereco', 'bairro', 'estado_civil', 'nome_conjuge', 'valor_primeira_contribuicao']
         widgets = {
+            'numero_dizimista': forms.TextInput(attrs={'class': 'form-control'}),
             'nome': forms.TextInput(attrs={'class': 'form-control'}),
             'endereco': forms.TextInput(attrs={'class': 'form-control'}),
             'bairro': forms.TextInput(attrs={'class': 'form-control'}),
-            'estado_civil': forms.Select(attrs={'class': 'form-select'}),
+            'estado_civil': forms.Select(attrs={'class': 'form-select', 'id': 'id_estado_civil'}),
+            'nome_conjuge': forms.TextInput(attrs={'class': 'form-control', 'id': 'id_nome_conjuge'}),
             'valor_primeira_contribuicao': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
         }
 

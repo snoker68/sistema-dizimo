@@ -11,7 +11,7 @@
                 <form method="post">
                     {% csrf_token %}
                     {% for field in form %}
-                        <div class="mb-3">
+                        <div class="mb-3" id="div_{{ field.name }}">
                             <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
                             {{ field }}
                             {% if field.help_text %}
@@ -31,4 +31,29 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const estadoCivilSelect = document.getElementById('id_estado_civil');
+        const divConjuge = document.getElementById('div_nome_conjuge');
+        
+        function toggleConjuge() {
+            if (estadoCivilSelect.value === 'Casado') {
+                divConjuge.style.display = 'block';
+            } else {
+                divConjuge.style.display = 'none';
+                // Opcional: Limpar o campo se não for mais casado
+                document.getElementById('id_nome_conjuge').value = '';
+            }
+        }
+
+        // Executa ao carregar para caso de edição
+        toggleConjuge();
+        
+        // Executa ao mudar a opção
+        estadoCivilSelect.addEventListener('change', toggleConjuge);
+    });
+</script>
 {% endblock %}

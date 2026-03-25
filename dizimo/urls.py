@@ -13,7 +13,6 @@ urlpatterns = [
     path('pagamentos/', views.PagamentoListView.as_view(), name='listar_pagamentos'),
     path('pagamento/novo/', views.PagamentoCreateView.as_view(), name='registrar_pagamento'),
     path('pagamento/<int:pk>/editar/', views.PagamentoUpdateView.as_view(), name='editar_pagamento'),
-    path('pagamento/<int:pk>/excluir/', views.PagamentoDeleteView.as_view(), name='excluir_pagamento'),
     
     path('usuarios/', views.UsuarioListView.as_view(), name='listar_usuarios'),
     path('usuarios/novo/', views.UsuarioCreateView.as_view(), name='cadastrar_usuario'),

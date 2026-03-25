@@ -7,10 +7,12 @@ class Dizimista(models.Model):
         ('Casado', 'Casado'),
     ]
 
+    numero_dizimista = models.CharField(max_length=50, blank=True, null=True, verbose_name="Nº Dizimista")
     nome = models.CharField(max_length=200)
     endereco = models.CharField(max_length=255)
     bairro = models.CharField(max_length=100)
     estado_civil = models.CharField(max_length=20, choices=ESTADO_CIVIL_CHOICES)
+    nome_conjuge = models.CharField(max_length=200, blank=True, null=True, verbose_name="Nome do Cônjuge")
     valor_primeira_contribuicao = models.DecimalField(max_digits=10, decimal_places=2)
     data_cadastro = models.DateTimeField(auto_now_add=True)
 

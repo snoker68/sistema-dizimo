@@ -39,10 +39,6 @@
                         <td>{{ p.criado_em|date:"d/m/Y - H:i" }}</td>
                         <td class="text-end">
                             <a href="{% url 'editar_pagamento' p.pk %}" class="btn btn-sm btn-light border" title="Editar"><i class="bi bi-pencil-square text-primary"></i></a>
-                            <form method="post" action="{% url 'excluir_pagamento' p.pk %}" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja apagar o registro de pagamento de R$ {{ p.valor }} do membro {{ p.dizimista.nome }}?');">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-light border" title="Excluir"><i class="bi bi-trash3-fill text-danger"></i></button>
-                            </form>
                         </td>
                     </tr>
                     {% empty %}

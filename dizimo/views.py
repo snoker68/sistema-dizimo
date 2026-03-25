@@ -82,13 +82,6 @@ class PagamentoUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'pagamento_form.html'
     success_url = reverse_lazy('listar_pagamentos')
 
-class PagamentoDeleteView(LoginRequiredMixin, DeleteView):
-    model = Pagamento
-    success_url = reverse_lazy('listar_pagamentos')
-    
-    def post(self, request, *args, **kwargs):
-        return super().delete(request, *args, **kwargs)
-
 class UsuarioListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     model = User
     template_name = 'usuario_list.html'
@@ -156,18 +149,25 @@ def importar_dizimistas_excel(request):
             
             # Pula o cabeçalho (assumindo a linha 1 como cabeçalho)
             for row in sheet.iter_rows(min_row=2, values_only=True):
-                # Se a primeira coluna (nome) estiver vazia, ignora a linha
-                if not row[0]: 
+                if not row[0] and not row[1]: 
                     continue
                     
-                nome = str(row[0]).strip()
-                endereco = str(row[1] or '').strip()
-                bairro = str(row[2] or '').strip()
-                estado_civil = str(row[3] or 'Solteiro').strip().capitalize()
+                numero_dizimista = str(row[0] or '').strip()
+                nome = str(row[1] or '').strip()
+                endereco = str(row[2] or '').strip()
+                bairro = str(row[3] or '').strip()
+                estado_civil = str(row[4] or 'Solteiro').strip().capitalize()
+                nome_conjuge = str(row[5] or '').strip() if len(row) > 5 else ''
                 
                 # Tratamento financeiro tolerante a formatos de Excel
                 try:
-                    valor_str = str(row[4]).replace('R$', '').replace(',', '.').strip()
+                    # Coluna: Numero(0), Nome(1), End(2), Bairro(3), EstCiv(4), Conj(5), Valor(6)
+                    # O valor está na 7ª (índice 6) se houver 7 colunas, senão na 6ª (índice 5), etc
+                    if len(row) > 6: val_idx = 6
+                    elif len(row) > 5: val_idx = 5
+                    else: val_idx = 4
+                    
+                    valor_str = str(row[val_idx]).replace('R$', '').replace(',', '.').strip()
                     if valor_str == 'None' or not valor_str:
                         valor = Decimal('0.00')
                     else:
@@ -180,10 +180,12 @@ def importar_dizimistas_excel(request):
                     estado_civil = 'Solteiro'
                     
                 novo = Dizimista(
+                    numero_dizimista=numero_dizimista,
                     nome=nome,
                     endereco=endereco,
                     bairro=bairro,
                     estado_civil=estado_civil,
+                    nome_conjuge=nome_conjuge if estado_civil == 'Casado' else '',
                     valor_primeira_contribuicao=valor
                 )
                 novos_dizimistas.append(novo)
