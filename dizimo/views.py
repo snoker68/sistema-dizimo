@@ -38,7 +38,28 @@ class DizimistaListView(LoginRequiredMixin, ListView):
     model = Dizimista
     template_name = 'dizimista_list.html'
     context_object_name = 'dizimistas'
-    ordering = ['nome']
+    
+    def get_queryset(self):
+        queryset = Dizimista.objects.all().order_by('nome')
+        q = self.request.GET.get('q')
+        bairro = self.request.GET.get('bairro')
+        estado_civil = self.request.GET.get('estado_civil')
+        
+        if q:
+            from django.db.models import Q
+            queryset = queryset.filter(Q(nome__icontains=q) | Q(numero_dizimista__icontains=q))
+        if bairro:
+            queryset = queryset.filter(bairro=bairro)
+        if estado_civil:
+            queryset = queryset.filter(estado_civil=estado_civil)
+            
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Lista de bairros únicos para o filtro
+        context['bairros'] = Dizimista.objects.values_list('bairro', flat=True).distinct().order_by('bairro')
+        return context
 
 class DizimistaCreateView(LoginRequiredMixin, CreateView):
     model = Dizimista
@@ -63,8 +84,31 @@ class PagamentoListView(LoginRequiredMixin, ListView):
     model = Pagamento
     template_name = 'pagamento_list.html'
     context_object_name = 'pagamentos'
-    # Otimização crucial: select_related evita queries extras N+1 no banco
-    queryset = Pagamento.objects.select_related('dizimista', 'registrado_por').order_by('-data_pagamento')
+    
+    def get_queryset(self):
+        queryset = Pagamento.objects.select_related('dizimista', 'registrado_por').order_by('-data_pagamento')
+        q = self.request.GET.get('q')
+        data_inicio = self.request.GET.get('data_inicio')
+        data_fim = self.request.GET.get('data_fim')
+        metodo = self.request.GET.get('metodo')
+        
+        if q:
+            queryset = queryset.filter(dizimista__nome__icontains=q)
+        if data_inicio:
+            queryset = queryset.filter(data_pagamento__gte=data_inicio)
+        if data_fim:
+            queryset = queryset.filter(data_pagamento__lte=data_fim)
+        if metodo:
+            queryset = queryset.filter(forma_pagamento=metodo)
+            
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Lista de formas de pagamento para o filtro
+        context['formas_pagamento'] = Pagamento.FORMA_PAGAMENTO_CHOICES
+        # Bairros também podem ser úteis aqui se precisarmos, mas por enquanto filtragem é por nome
+        return context
 
 class PagamentoCreateView(LoginRequiredMixin, CreateView):
     model = Pagamento

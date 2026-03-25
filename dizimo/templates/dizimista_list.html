@@ -16,6 +16,43 @@
     </div>
 </div>
 
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label for="q" class="form-label small fw-bold text-muted">Busca por Nome ou Nº</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" id="q" class="form-control border-start-0 ps-0" placeholder="Digite para buscar..." value="{{ request.GET.q }}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label for="bairro" class="form-label small fw-bold text-muted">Filtrar por Bairro</label>
+                <select name="bairro" id="bairro" class="form-select">
+                    <option value="">Todos os Bairros</option>
+                    {% for b in bairros %}
+                        <option value="{{ b }}" {% if request.GET.bairro == b %}selected{% endif %}>{{ b }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <div class="flex-grow-1">
+                    <label for="estado_civil" class="form-label small fw-bold text-muted">Estado Civil</label>
+                    <select name="estado_civil" id="estado_civil" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="Solteiro" {% if request.GET.estado_civil == 'Solteiro' %}selected{% endif %}>Solteiro</option>
+                        <option value="Casado" {% if request.GET.estado_civil == 'Casado' %}selected{% endif %}>Casado</option>
+                    </select>
+                </div>
+                <div class="d-flex align-items-end mb-0">
+                    <button type="submit" class="btn btn-primary-custom px-4 fw-bold">Filtrar</button>
+                    <a href="{% url 'listar_dizimistas' %}" class="btn btn-light ms-2 border" title="Limpar Filtros"><i class="bi bi-arrow-counterclockwise"></i></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="card border-0">
     <div class="card-body p-0">
         <div class="table-responsive">
