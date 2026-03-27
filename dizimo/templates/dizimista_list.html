@@ -61,11 +61,11 @@
                     <tr>
                         <th style="width: 80px;">Nº</th>
                         <th>Nome</th>
-                        <th>Bairro</th>
-                        <th>Estado Civil</th>
-                        <th>Cônjuge</th>
-                        <th>Contribuição Inicial (R$)</th>
-                        <th>Data Cadastro</th>
+                        <th class="d-none d-md-table-cell">Bairro</th>
+                        <th class="d-none d-md-table-cell">Estado Civil</th>
+                        <th class="d-none d-md-table-cell">Cônjuge</th>
+                        <th class="d-none d-lg-table-cell">Contribuição Inicial (R$)</th>
+                        <th class="d-none d-lg-table-cell">Data Cadastro</th>
                         <th class="text-end">Ações</th>
                     </tr>
                 </thead>
@@ -74,11 +74,11 @@
                     <tr>
                         <td class="text-muted small">#{{ d.numero_dizimista|default:"-" }}</td>
                         <td><strong>{{ d.nome }}</strong></td>
-                        <td>{{ d.bairro }}</td>
-                        <td>{{ d.estado_civil }}</td>
-                        <td>{{ d.nome_conjuge|default:"-" }}</td>
-                        <td>{{ d.valor_primeira_contribuicao }}</td>
-                        <td>{{ d.data_cadastro|date:"d/m/Y - H:i" }}</td>
+                        <td class="d-none d-md-table-cell">{{ d.bairro }}</td>
+                        <td class="d-none d-md-table-cell">{{ d.estado_civil }}</td>
+                        <td class="d-none d-md-table-cell">{{ d.nome_conjuge|default:"-" }}</td>
+                        <td class="d-none d-lg-table-cell">{{ d.valor_primeira_contribuicao }}</td>
+                        <td class="d-none d-lg-table-cell">{{ d.data_cadastro|date:"d/m/Y - H:i" }}</td>
                         <td class="text-end">
                             <a href="{% url 'editar_dizimista' d.pk %}" class="btn btn-sm btn-light border" title="Editar"><i class="bi bi-pencil-square text-primary"></i></a>
                             <form method="post" action="{% url 'excluir_dizimista' d.pk %}" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir o membro {{ d.nome }}? Todos os pagamentos dele também serão apagados.');">

@@ -57,7 +57,14 @@
 {% block scripts %}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const ctx = document.getElementById('arrecadacaoChart').getContext('2d');
+        const canvas = document.getElementById('arrecadacaoChart');
+        const ctx = canvas.getContext('2d');
+        
+        // Ajuste de altura responsiva para o gráfico
+        if (window.innerWidth < 768) {
+            canvas.height = 200;
+        }
+
         const chart = new Chart(ctx, {
             type: 'bar',
             data: {

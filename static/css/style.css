@@ -154,3 +154,36 @@ body {
     text-transform: uppercase;
     pointer-events: none;
 }
+
+/* Responsividade Mobile */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+
+    h2 {
+        font-size: 1.5rem !important;
+    }
+
+    .card-title {
+        font-size: 1.2rem !important;
+    }
+
+    .btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    /* Evitar que a versão cubra conteúdo importante */
+    .version-tag {
+        bottom: 10px;
+        left: 10px;
+        font-size: 0.6rem;
+        padding: 2px 8px;
+    }
+}

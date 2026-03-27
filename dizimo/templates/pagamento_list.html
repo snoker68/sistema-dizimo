@@ -60,10 +60,10 @@
                     <tr>
                         <th>Dizimista</th>
                         <th>Valor (R$)</th>
-                        <th>Data Referência</th>
-                        <th>Forma de Pag.</th>
-                        <th>Registrado Por</th>
-                        <th>Cadastrado Em</th>
+                        <th>Data Ref.</th>
+                        <th class="d-none d-md-table-cell">Forma de Pag.</th>
+                        <th class="d-none d-lg-table-cell">Registrado Por</th>
+                        <th class="d-none d-lg-table-cell">Cadastrado Em</th>
                         <th class="text-end">Ações</th>
                     </tr>
                 </thead>
@@ -73,9 +73,9 @@
                         <td><strong>{{ p.dizimista.nome }}</strong></td>
                         <td class="text-success fw-bold">{{ p.valor }}</td>
                         <td>{{ p.data_pagamento|date:"d/m/Y" }}</td>
-                        <td><span class="badge bg-secondary">{{ p.forma_pagamento }}</span></td>
-                        <td>{{ p.registrado_por.username|default:"N/A" }}</td>
-                        <td>{{ p.criado_em|date:"d/m/Y - H:i" }}</td>
+                        <td class="d-none d-md-table-cell"><span class="badge bg-secondary">{{ p.forma_pagamento }}</span></td>
+                        <td class="d-none d-lg-table-cell">{{ p.registrado_por.username|default:"N/A" }}</td>
+                        <td class="d-none d-lg-table-cell">{{ p.criado_em|date:"d/m/Y - H:i" }}</td>
                         <td class="text-end">
                             <a href="{% url 'editar_pagamento' p.pk %}" class="btn btn-sm btn-light border"
                                 title="Editar"><i class="bi bi-pencil-square text-primary"></i></a>
