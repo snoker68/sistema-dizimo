@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-72xruu*h6dfj65mu)l)thfkqf-gu4n2ard__549(%95=roj*su
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Em produção, você deve colocar o seu domínio aqui (ex: 'danilo.pythonanywhere.com')
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -126,3 +127,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
+
+# Configuração para produção (PythonAnywhere)
+STATIC_ROOT = BASE_DIR / 'static_root'
+
+# Configurações de Mídia (Fotos/Comprovantes)
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'

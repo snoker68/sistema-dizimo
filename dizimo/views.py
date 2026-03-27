@@ -12,8 +12,11 @@ import datetime
 import csv
 from django.http import HttpResponse
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 import openpyxl
 from decimal import Decimal
+import git
+import os
 
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
@@ -241,3 +244,31 @@ def importar_dizimistas_excel(request):
             messages.error(request, f'Erro inesperado ao processar o arquivo: {str(e)}')
             
     return redirect('listar_dizimistas')
+
+@csrf_exempt
+def webhook_update(request):
+    """
+    Endpoint para atualização automática via Git (CI/CD).
+    Protegido por CSRF exempt para permitir requisições de webhooks externos.
+    """
+    if request.method == 'POST':
+        # Token de segurança simples via parâmetro GET
+        # Exemplo: /update_server/?token=meutokensecreto
+        token = request.GET.get('token')
+        if token != 'mudar_este_token_depois':
+            return HttpResponse('Não autorizado (Token inválido ou ausente)', status=401)
+        
+        try:
+            # Caminho absoluto para o repositório no PythonAnywhere
+            repo_path = '/home/PDDFatima123/DizimosSistem'
+            if not os.path.exists(os.path.join(repo_path, '.git')):
+                return HttpResponse(f'Repositório Git não encontrado em {repo_path}', status=404)
+
+            repo = git.Repo(repo_path)
+            origin = repo.remotes.origin
+            origin.pull()
+            return HttpResponse('Servidor atualizado com sucesso via Git pull!', status=200)
+        except Exception as e:
+            return HttpResponse(f'Erro durante o pull: {str(e)}', status=500)
+            
+    return HttpResponse('Método não permitido (Use POST)', status=405)

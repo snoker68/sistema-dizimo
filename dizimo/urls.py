@@ -19,4 +19,5 @@ urlpatterns = [
     path('usuarios/<int:pk>/excluir/', views.UsuarioDeleteView.as_view(), name='excluir_usuario'),
     
     path('exportar/', views.exportar_pagamentos_csv, name='exportar_csv'),
+    path('update_server/', views.webhook_update, name='webhook_update'),
 ]

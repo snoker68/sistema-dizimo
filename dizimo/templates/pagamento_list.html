@@ -39,7 +39,7 @@
                 <select name="metodo" id="metodo" class="form-select">
                     <option value="">Todos</option>
                     {% for val, label in formas_pagamento %}
-                    <option value="{{ val }}" {% if request.GET.metodo==val %}selected{% endif %}>{{ label }}</option>
+                    <option value="{{ val }}" {% if request.GET.metodo == val %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
                 </select>
             </div>
