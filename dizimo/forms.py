@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Dizimista, Pagamento
@@ -38,3 +39,8 @@ class PagamentoForm(forms.ModelForm):
             'data_pagamento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'forma_pagamento': forms.Select(attrs={'class': 'form-select'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.instance.pk: # Se for um novo registro
+            self.initial['data_pagamento'] = timezone.now().date()
