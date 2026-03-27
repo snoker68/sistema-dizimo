@@ -263,7 +263,7 @@ def webhook_update(request):
         
         try:
             # Caminho absoluto para o repositório no PythonAnywhere
-            repo_path = '/home/PDDFatima123/DizimosSistem'
+            repo_path = '/home/PDDfatima123/sistema-dizimo'
             if not os.path.exists(os.path.join(repo_path, '.git')):
                 return HttpResponse(f'Repositório Git não encontrado em {repo_path}', status=404)
 
