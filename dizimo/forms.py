@@ -32,15 +32,9 @@ class DizimistaForm(forms.ModelForm):
 class PagamentoForm(forms.ModelForm):
     class Meta:
         model = Pagamento
-        fields = ['dizimista', 'valor', 'data_pagamento', 'forma_pagamento']
+        fields = ['dizimista', 'valor', 'forma_pagamento']
         widgets = {
             'dizimista': forms.Select(attrs={'class': 'form-select'}),
             'valor': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
-            'data_pagamento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'forma_pagamento': forms.Select(attrs={'class': 'form-select'}),
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if not self.instance.pk: # Se for um novo registro
-            self.initial['data_pagamento'] = timezone.now().date()

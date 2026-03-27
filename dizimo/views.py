@@ -121,6 +121,9 @@ class PagamentoCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.registrado_por = self.request.user
+        # Define a data de pagamento automaticamente como HOJE se não estiver no formulário
+        if not form.instance.data_pagamento:
+            form.instance.data_pagamento = timezone.now().date()
         return super().form_valid(form)
 
 class PagamentoUpdateView(LoginRequiredMixin, UpdateView):
