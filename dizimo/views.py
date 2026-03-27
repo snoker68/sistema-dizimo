@@ -258,7 +258,7 @@ def webhook_update(request):
         # Token de segurança simples via parâmetro GET
         # Exemplo: /update_server/?token=meutokensecreto
         token = request.GET.get('token')
-        if token != 'mudar_este_token_depois':
+        if token != 'PDD':
             return HttpResponse('Não autorizado (Token inválido ou ausente)', status=401)
         
         try:
