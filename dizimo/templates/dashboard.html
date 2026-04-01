@@ -2,18 +2,22 @@
 
 {% block content %}
 <div class="row mb-4 align-items-center">
-    <div class="col-md-8">
+    <div class="col-md-6">
         <h2 class="text-primary-custom mb-1"><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
-        <p class="text-muted mb-0">Resumo de arrecadações de dízimos.</p>
+        <p class="text-muted mb-0 small">Resumo de arrecadações de dízimos.</p>
     </div>
-    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+    <div class="col-md-6 text-md-end mt-3 mt-md-0 d-flex justify-content-start justify-content-md-end gap-2">
+        <form method="get" class="d-flex align-items-center mb-0">
+            <input type="month" name="mes_ano" class="form-control form-control-sm border-2 shadow-sm" value="{{ mes_ano }}" onchange="this.form.submit()" style="max-height: 38px; width: auto;">
+        </form>
         <a href="{% url 'exportar_csv' %}" class="btn btn-outline-success border-2 shadow-sm fw-bold">
-            <i class="bi bi-file-earmark-excel-fill me-1"></i> Exportar para Excel
+            <i class="bi bi-file-earmark-excel-fill me-1"></i> Exportar
         </a>
     </div>
 </div>
 
 <div class="row mb-4">
+    {% if is_current_month %}
     <div class="col-md-4">
         <div class="card bg-primary-custom text-white mb-3 border-0 h-100 p-2">
             <div class="card-header border-0 bg-transparent opacity-75 fw-bold text-uppercase" style="letter-spacing:1px; font-size: 0.8rem;">Arrecadado Hoje</div>
@@ -31,8 +35,11 @@
         </div>
     </div>
     <div class="col-md-4">
+    {% else %}
+    <div class="col-md-12">
+    {% endif %}
         <div class="card bg-dark text-white mb-3 border-0 h-100 p-2">
-            <div class="card-header border-0 bg-transparent opacity-75 fw-bold text-uppercase" style="letter-spacing:1px; font-size: 0.8rem;">Arrecadado no Mês</div>
+            <div class="card-header border-0 bg-transparent opacity-75 fw-bold text-uppercase" style="letter-spacing:1px; font-size: 0.8rem;">{% if is_current_month %}Arrecadado no Mês{% else %}Total Arrecadado em {{ mes_str }}{% endif %}</div>
             <div class="card-body d-flex flex-column justify-content-center">
                 <h2 class="card-title mb-0 fw-bold"><i class="bi bi-calendar-month opacity-50 me-2"></i>R$ {{ ganhos_mes|floatformat:2 }}</h2>
             </div>
@@ -65,27 +72,37 @@
             canvas.height = 200;
         }
 
+        const isCurrentMonth = {{ is_current_month|yesno:"true,false" }};
+        let chartLabels = [];
+        let chartData = [];
+        let bgColors = [];
+        let borderColors = [];
+
+        if (isCurrentMonth) {
+            chartLabels = ['Hoje', 'Esta Semana', 'Este Mês'];
+            chartData = [
+                {{ ganhos_dia|stringformat:"f" }}, 
+                {{ ganhos_semana|stringformat:"f" }}, 
+                {{ ganhos_mes|stringformat:"f" }}
+            ];
+            bgColors = ['rgba(40, 167, 69, 0.7)', 'rgba(23, 162, 184, 0.7)', 'rgba(0, 123, 255, 0.7)'];
+            borderColors = ['rgba(40, 167, 69, 1)', 'rgba(23, 162, 184, 1)', 'rgba(0, 123, 255, 1)'];
+        } else {
+            chartLabels = ['Arrecadação de {{ mes_str }}'];
+            chartData = [{{ ganhos_mes|stringformat:"f" }}];
+            bgColors = ['rgba(0, 123, 255, 0.7)'];
+            borderColors = ['rgba(0, 123, 255, 1)'];
+        }
+
         const chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Hoje', 'Esta Semana', 'Este Mês'],
+                labels: chartLabels,
                 datasets: [{
-                    label: 'Arrecadação (R$)',
-                    data: [
-                        {{ ganhos_dia|stringformat:"f" }}, 
-                        {{ ganhos_semana|stringformat:"f" }}, 
-                        {{ ganhos_mes|stringformat:"f" }}
-                    ],
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.7)',
-                        'rgba(23, 162, 184, 0.7)',
-                        'rgba(0, 123, 255, 0.7)'
-                    ],
-                    borderColor: [
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(23, 162, 184, 1)',
-                        'rgba(0, 123, 255, 1)'
-                    ],
+                    label: 'Valores (R$)',
+                    data: chartData,
+                    backgroundColor: bgColors,
+                    borderColor: borderColors,
                     borderWidth: 1
                 }]
             },

@@ -75,8 +75,7 @@
                     {% endif %}
                 </ul>
                 <div class="d-flex align-items-center">
-                    <span class="text-white me-3"><i class="bi bi-person-circle me-1"></i> Olá, {{ user.username
-                        }}</span>
+                    <span class="text-white me-3"><i class="bi bi-person-circle me-1"></i> Olá, {{ user.username }}</span>
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
                         <button class="btn btn-outline-light btn-sm fw-bold" type="submit"><i

@@ -27,14 +27,42 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
         hoje = timezone.now().date()
-        inicio_semana = hoje - datetime.timedelta(days=hoje.weekday())
-        inicio_mes = hoje.replace(day=1)
+        mes_ano_param = self.request.GET.get('mes_ano')
+        
+        is_current_month = True
+        if mes_ano_param:
+            try:
+                ano, mes = map(int, mes_ano_param.split('-'))
+                if ano != hoje.year or mes != hoje.month:
+                    is_current_month = False
+            except ValueError:
+                ano, mes = hoje.year, hoje.month
+                mes_ano_param = f"{ano}-{mes:02d}"
+        else:
+            ano, mes = hoje.year, hoje.month
+            mes_ano_param = f"{ano}-{mes:02d}"
 
         pagamentos = Pagamento.objects.only('valor', 'data_pagamento')
-        context['ganhos_dia'] = pagamentos.filter(data_pagamento=hoje).aggregate(Sum('valor'))['valor__sum'] or 0
-        context['ganhos_semana'] = pagamentos.filter(data_pagamento__gte=inicio_semana).aggregate(Sum('valor'))['valor__sum'] or 0
-        context['ganhos_mes'] = pagamentos.filter(data_pagamento__gte=inicio_mes).aggregate(Sum('valor'))['valor__sum'] or 0
+        
+        if is_current_month:
+            inicio_semana = hoje - datetime.timedelta(days=hoje.weekday())
+            inicio_mes = hoje.replace(day=1)
+            
+            context['ganhos_dia'] = pagamentos.filter(data_pagamento=hoje).aggregate(Sum('valor'))['valor__sum'] or 0
+            context['ganhos_semana'] = pagamentos.filter(data_pagamento__gte=inicio_semana).aggregate(Sum('valor'))['valor__sum'] or 0
+            context['ganhos_mes'] = pagamentos.filter(data_pagamento__gte=inicio_mes).aggregate(Sum('valor'))['valor__sum'] or 0
+        else:
+            context['ganhos_dia'] = 0
+            context['ganhos_semana'] = 0
+            context['ganhos_mes'] = pagamentos.filter(data_pagamento__year=ano, data_pagamento__month=mes).aggregate(Sum('valor'))['valor__sum'] or 0
+            
+        context['is_current_month'] = is_current_month
+        context['mes_ano'] = mes_ano_param
+        # Nomes dos meses hardcoded pra ser mais simples e em PT-BR
+        meses = {1:"Jan", 2:"Fev", 3:"Mar", 4:"Abr", 5:"Mai", 6:"Jun", 7:"Jul", 8:"Ago", 9:"Set", 10:"Out", 11:"Nov", 12:"Dez"}
+        context['mes_str'] = f"{meses.get(mes, '')}/{ano}"
         return context
 
 class DizimistaListView(LoginRequiredMixin, ListView):
