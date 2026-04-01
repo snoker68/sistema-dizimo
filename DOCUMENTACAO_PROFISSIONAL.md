@@ -1,4 +1,4 @@
-# Manual do Usuário - Sistema de Controle de Dízimo v1.3.6
+# Manual do Usuário - Sistema do Dizimo do Fatima  v1.3.6
 
 Bem-vindo ao manual oficial do seu novo sistema de gestão. Este documento foi criado para ajudar você e sua equipe a operar o sistema com eficiência e segurança.
 
@@ -39,4 +39,4 @@ Sempre que precisar de um relatório físico ou para prestação de contas:
 Se você tiver uma lista grande de dizimistas em uma planilha Excel, você pode usar a função de **Importar Excel** na lista de dizimistas para cadastrar todos de uma vez, economizando horas de trabalho manual.
 
 ---
-*Este sistema foi desenvolvido com foco em simplicidade, segurança e modernidade.* 💒✨
+*Este sistema foi desenvolvido com foco em simplicidade, segurança e modernidade.* 
